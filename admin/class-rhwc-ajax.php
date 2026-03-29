@@ -105,12 +105,13 @@ class RHWC_Ajax {
 	public function save_settings() {
 		$this->check_nonce();
 
-		update_option( 'rhwc_default_count',   intval( $_POST['default_count'] ?? 5 ) );
-		update_option( 'rhwc_default_rating',  sanitize_text_field( wp_unslash( $_POST['default_rating'] ?? '4-5' ) ) );
-		update_option( 'rhwc_default_names',   sanitize_textarea_field( wp_unslash( $_POST['default_names'] ?? '' ) ) );
-		update_option( 'rhwc_custom_comments', sanitize_textarea_field( wp_unslash( $_POST['custom_comments'] ?? '' ) ) );
-		update_option( 'rhwc_content_style',   sanitize_text_field( wp_unslash( $_POST['content_style'] ?? 'medium' ) ) );
-		update_option( 'rhwc_enable_bulk',     sanitize_text_field( wp_unslash( $_POST['enable_bulk'] ?? 'yes' ) ) );
+		update_option( 'rhwc_default_count',              intval( $_POST['default_count'] ?? 5 ) );
+		update_option( 'rhwc_default_rating',             sanitize_text_field( wp_unslash( $_POST['default_rating'] ?? '4-5' ) ) );
+		update_option( 'rhwc_default_names',              sanitize_textarea_field( wp_unslash( $_POST['default_names'] ?? '' ) ) );
+		update_option( 'rhwc_custom_comments',            sanitize_textarea_field( wp_unslash( $_POST['custom_comments'] ?? '' ) ) );
+		update_option( 'rhwc_content_style',              sanitize_text_field( wp_unslash( $_POST['content_style'] ?? 'medium' ) ) );
+		update_option( 'rhwc_enable_bulk',                sanitize_text_field( wp_unslash( $_POST['enable_bulk'] ?? 'yes' ) ) );
+		update_option( 'rhwc_delete_data_on_uninstall',   sanitize_key( $_POST['delete_data_on_uninstall'] ?? 'no' ) );
 
 		wp_send_json_success( array( 'message' => __( 'Settings saved.', 'rhwc' ) ) );
 	}
@@ -118,12 +119,13 @@ class RHWC_Ajax {
 	public function get_settings() {
 		$this->check_nonce();
 		wp_send_json_success( array(
-			'defaultCount'   => get_option( 'rhwc_default_count', 5 ),
-			'defaultRating'  => get_option( 'rhwc_default_rating', '4-5' ),
-			'defaultNames'   => get_option( 'rhwc_default_names', '' ),
-			'customComments' => get_option( 'rhwc_custom_comments', '' ),
-			'contentStyle'   => get_option( 'rhwc_content_style', 'medium' ),
-			'enableBulk'     => get_option( 'rhwc_enable_bulk', 'yes' ),
+			'defaultCount'           => get_option( 'rhwc_default_count', 5 ),
+			'defaultRating'          => get_option( 'rhwc_default_rating', '4-5' ),
+			'defaultNames'           => get_option( 'rhwc_default_names', '' ),
+			'customComments'         => get_option( 'rhwc_custom_comments', '' ),
+			'contentStyle'           => get_option( 'rhwc_content_style', 'medium' ),
+			'enableBulk'             => get_option( 'rhwc_enable_bulk', 'yes' ),
+			'deleteDataOnUninstall'  => get_option( 'rhwc_delete_data_on_uninstall', 'no' ),
 		) );
 	}
 
@@ -226,7 +228,7 @@ class RHWC_Ajax {
 
         if ( $comment_id ) {
             $comment = get_comment( $comment_id );
-            $new_status = $comment->comment_approved == '1' ? '0' : '1';
+            $new_status = '1' === $comment->comment_approved ? '0' : '1';
             wp_update_comment( array(
                 'comment_ID' => $comment_id,
                 'comment_approved' => $new_status

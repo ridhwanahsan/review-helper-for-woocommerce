@@ -180,4 +180,34 @@ const Settings = () => {
                 {/* ─── Danger Zone ─── */}
                 <p style={{ ...sectionHeader, color: '#d63638', borderBottomColor: '#f9d0d0' }}>Danger Zone</p>
 
-                <div style={{ marginBottom: '20px', padding
+                <div style={{ marginBottom: '20px', padding: '16px', border: '1px solid #d63638', borderRadius: '6px', background: '#fff5f5' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: 600, color: '#d63638' }}>
+                        <input
+                            type="checkbox"
+                            checked={ deleteDataOnUninstall === 'yes' }
+                            onChange={ e => setDeleteDataOnUninstall(e.target.checked ? 'yes' : 'no') }
+                            style={{ width: '18px', height: '18px' }}
+                        />
+                        <span>Delete all plugin data when uninstalling</span>
+                    </label>
+                    <p className="description" style={{ marginTop: '8px', color: '#646970' }}>
+                        ⚠️ If checked, all plugin settings and generated review metadata will be permanently deleted when you uninstall this plugin.
+                        Reviews themselves (WordPress comments) will remain unless deleted manually.
+                    </p>
+                </div>
+
+                <div style={{ marginTop: '24px' }}>
+                    <button
+                        className="button button-primary button-hero"
+                        onClick={ handleSave }
+                        disabled={ saving }
+                    >
+                        { saving ? 'Saving…' : '💾 Save Settings' }
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default Settings;
