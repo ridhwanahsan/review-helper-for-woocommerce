@@ -1,0 +1,176 @@
+/* ==========================================================================
+   Dashboard - Dashboard.js
+   Review Helper for WooCommerce
+   ========================================================================== */
+
+.rhwc-page-hero--dashboard {
+    background:
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.2), transparent 28%),
+        linear-gradient(135deg, #ffffff 0%, #f3f8ff 48%, #edf5ff 100%);
+}
+
+.rhwc-dashboard-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.rhwc-dashboard-highlight {
+    padding: 20px 22px;
+    border-radius: 22px;
+    border: 1px solid var(--rhwc-border);
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    box-shadow: var(--rhwc-shadow);
+}
+
+.rhwc-dashboard-highlight__label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--rhwc-text-muted);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.rhwc-dashboard-highlight__value {
+    display: block;
+    color: var(--rhwc-text);
+    font-size: 28px;
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+}
+
+.rhwc-dashboard-highlight__meta {
+    display: block;
+    margin-top: 8px;
+    color: var(--rhwc-text-muted);
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+.rhwc-dashboard-stack {
+    display: grid;
+    gap: 20px;
+}
+
+.rhwc-actions-grid {
+    display: grid;
+    gap: 14px;
+}
+
+.rhwc-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    padding: 18px 20px;
+    border-radius: 20px;
+    border: 1px solid var(--rhwc-border);
+    background: #ffffff;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    transition: transform var(--rhwc-transition), box-shadow var(--rhwc-transition), border-color var(--rhwc-transition), background var(--rhwc-transition);
+    box-shadow: 0 10px 22px rgba(15, 23, 42, 0.05);
+}
+
+.rhwc-action-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(96, 165, 250, 0.34);
+    box-shadow: 0 18px 32px rgba(15, 23, 42, 0.12);
+}
+
+.rhwc-action-btn--primary {
+    background: linear-gradient(135deg, #dbeafe, #ffffff);
+    border-color: rgba(96, 165, 250, 0.36);
+}
+
+.rhwc-action-btn__icon {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--rhwc-primary) 0%, var(--rhwc-primary-light) 100%);
+    color: #ffffff;
+    box-shadow: 0 12px 22px rgba(37, 99, 235, 0.22);
+}
+
+.rhwc-action-btn__content {
+    flex: 1;
+    min-width: 0;
+}
+
+.rhwc-action-btn__topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.rhwc-action-btn__title {
+    display: block;
+    color: var(--rhwc-text);
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.rhwc-action-btn__tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #dbeafe;
+    color: #1e3a8a;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.rhwc-action-btn__sub {
+    display: block;
+    color: var(--rhwc-text-muted);
+    font-size: 12.8px;
+    line-height: 1.55;
+}
+
+.rhwc-action-btn__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--rhwc-text-light);
+    transition: transform var(--rhwc-transition), color var(--rhwc-transition);
+}
+
+.rhwc-action-btn:hover .rhwc-action-btn__arrow {
+    transform: translateX(3px);
+    color: var(--rhwc-primary);
+}
+
+.rhwc-dashboard-note-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+@media (max-width: 1180px) {
+    .rhwc-dashboard-highlights {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 782px) {
+    .rhwc-dashboard-note-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .rhwc-action-btn,
+    .rhwc-action-btn__topline {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
