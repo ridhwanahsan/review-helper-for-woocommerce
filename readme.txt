@@ -1,14 +1,14 @@
 === Review Helper for WooCommerce ===
-Contributors: antigravity
+Contributors: ridhwanahsann
 Tags: woocommerce, reviews, product reviews, bulk reviews, review generator
 Requires at least: 5.8
-Tested up to: 6.5
+Tested up to: 6.9
 Requires PHP: 7.4
 Stable tag: 1.0.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Easily generate and manage sample WooCommerce product reviews manually or in bulk — no AI, no external APIs.
+Easily generate and manage sample WooCommerce product reviews manually or in bulk.
 
 == Description ==
 
@@ -16,12 +16,12 @@ Easily generate and manage sample WooCommerce product reviews manually or in bul
 
 = Features =
 
-* **Single Product Generator** — Generate reviews directly from the WooCommerce product edit screen.
-* **Bulk Generator** — Generate reviews across all or specific products from one dashboard.
-* **Review Manager** — View, filter, edit, approve/unapprove, and delete generated reviews.
-* **Customizable Settings** — Set default reviewer names, comment templates, rating ranges, and content styles.
-* **React-Powered Dashboard** — Fast, smooth single-page admin UI with no page reloads.
-* **i18n Ready** — All strings are translatable.
+* **Single Product Generator** - Generate reviews directly from the WooCommerce product edit screen.
+* **Bulk Generator** - Generate reviews across all or specific products from one dashboard.
+* **Review Manager** - View, filter, edit, approve/unapprove, and delete generated reviews.
+* **Customizable Settings** - Set default reviewer names, comment templates, rating ranges, and content styles.
+* **React-Powered Dashboard** - Fast, smooth single-page admin UI with no page reloads.
+* **i18n Ready** - All strings are translatable.
 
 = Requirements =
 

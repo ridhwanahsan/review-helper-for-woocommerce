@@ -21,7 +21,11 @@ class RHWC_Core {
 	}
 
 	public function wc_missing_notice() {
-		echo '<div class="notice notice-error is-dismissible"><p><strong>Review Helper for WooCommerce</strong> requires WooCommerce to be installed and active.</p></div>';
+		printf(
+			'<div class="notice notice-error is-dismissible"><p><strong>%1$s</strong> %2$s</p></div>',
+			esc_html__( 'Review Helper for WooCommerce', 'review-helper-for-woocommerce' ),
+			esc_html__( 'requires WooCommerce to be installed and active.', 'review-helper-for-woocommerce' )
+		);
 	}
 
 	private function includes() {
@@ -35,9 +39,6 @@ class RHWC_Core {
 	}
 
 	private function init_hooks() {
-		// Load textdomain for i18n
-		add_action( 'init', array( $this, 'load_textdomain' ) );
-
 		if ( is_admin() ) {
 			$admin = new RHWC_Admin();
 			$admin->init();
@@ -51,10 +52,6 @@ class RHWC_Core {
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widget' ) );
 		}
-	}
-
-	public function load_textdomain() {
-		load_plugin_textdomain( 'rhwc', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 	}
 
 	public function enqueue_admin_scripts( $hook ) {
@@ -95,15 +92,16 @@ class RHWC_Core {
 				'nonce'   => wp_create_nonce( 'rhwc_ajax_nonce' ),
 				'stats'   => array(
 					'totalGenerated'  => get_option( 'rhwc_total_generated', 0 ),
-					'lastGeneratedDate' => get_option( 'rhwc_last_generated_date', 'Never' ),
+					'lastGeneratedDate' => get_option( 'rhwc_last_generated_date', __( 'Never', 'review-helper-for-woocommerce' ) ),
 				),
 				'settings' => array(
-					'defaultCount'   => get_option( 'rhwc_default_count', 5 ),
-					'defaultRating'  => get_option( 'rhwc_default_rating', '4-5' ),
-					'defaultNames'   => get_option( 'rhwc_default_names', '' ),
-					'customComments' => get_option( 'rhwc_custom_comments', '' ),
-					'contentStyle'   => get_option( 'rhwc_content_style', 'medium' ),
-					'enableBulk'     => get_option( 'rhwc_enable_bulk', 'yes' ),
+					'defaultCount'          => get_option( 'rhwc_default_count', 5 ),
+					'defaultRating'         => get_option( 'rhwc_default_rating', '4-5' ),
+					'defaultNames'          => get_option( 'rhwc_default_names', '' ),
+					'customComments'        => get_option( 'rhwc_custom_comments', '' ),
+					'contentStyle'          => get_option( 'rhwc_content_style', 'medium' ),
+					'enableBulk'            => get_option( 'rhwc_enable_bulk', 'yes' ),
+					'deleteDataOnUninstall' => get_option( 'rhwc_delete_data_on_uninstall', 'no' ),
 				),
 			) );
 
@@ -125,19 +123,19 @@ class RHWC_Core {
 	public function register_dashboard_widget() {
 		wp_add_dashboard_widget(
 			'rhwc_dashboard_widget',
-			__( 'Review Helper for WooCommerce', 'rhwc' ),
+			__( 'Review Helper for WooCommerce', 'review-helper-for-woocommerce' ),
 			array( $this, 'render_dashboard_widget' )
 		);
 	}
 
 	public function render_dashboard_widget() {
 		$total_generated = get_option( 'rhwc_total_generated', 0 );
-		$last_date       = get_option( 'rhwc_last_generated_date', __( 'Never', 'rhwc' ) );
+		$last_date       = get_option( 'rhwc_last_generated_date', __( 'Never', 'review-helper-for-woocommerce' ) );
 
 		echo '<div class="rhwc-dashboard-widget">';
-		echo '<p><strong>' . __( 'Total Generated Reviews:', 'rhwc' ) . '</strong> ' . esc_html( $total_generated ) . '</p>';
-		echo '<p><strong>' . __( 'Last Generated Date:', 'rhwc' ) . '</strong> ' . esc_html( $last_date ) . '</p>';
-		echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=review-helper' ) ) . '" class="button button-primary">' . __( 'Manage Reviews', 'rhwc' ) . '</a></p>';
+		echo '<p><strong>' . esc_html__( 'Total Generated Reviews:', 'review-helper-for-woocommerce' ) . '</strong> ' . esc_html( $total_generated ) . '</p>';
+		echo '<p><strong>' . esc_html__( 'Last Generated Date:', 'review-helper-for-woocommerce' ) . '</strong> ' . esc_html( $last_date ) . '</p>';
+		echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=review-helper' ) ) . '" class="button button-primary">' . esc_html__( 'Manage Reviews', 'review-helper-for-woocommerce' ) . '</a></p>';
 		echo '</div>';
 	}
 }

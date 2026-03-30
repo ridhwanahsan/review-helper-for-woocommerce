@@ -37,6 +37,7 @@ const BulkGenerate = () => {
     const [ rating, setRating ] = useState( s.defaultRating || '4-5' );
     const [ style, setStyle ] = useState( s.contentStyle || 'medium' );
     const [ names, setNames ] = useState( s.defaultNames || '' );
+    const [ skipGenerated, setSkipGenerated ] = useState( true );
     const [ isGenerating, setIsGenerating ] = useState( false );
     const [ status, setStatus ] = useState( '' );
     const [ statusType, setStatusType ] = useState( 'info' );
@@ -49,6 +50,13 @@ const BulkGenerate = () => {
         setStatus( 'Preparing generation. Please wait...' );
         setStatusType( 'info' );
 
+        if ( products === 'specific' && ! selectedIdsCount ) {
+            setStatusType( 'error' );
+            setStatus( 'Add at least one product ID before starting the batch.' );
+            setIsGenerating( false );
+            return;
+        }
+
         const formData = new FormData();
         formData.append( 'action', 'rhwc_generate_bulk' );
         formData.append( 'security', globalData.nonce );
@@ -57,7 +65,7 @@ const BulkGenerate = () => {
         formData.append( 'rating', rating );
         formData.append( 'style', style );
         formData.append( 'names', names );
-        formData.append( 'exclude_generated', true );
+        formData.append( 'exclude_generated', skipGenerated ? 'true' : 'false' );
 
         try {
             const res = await fetch( globalData.ajaxUrl, { method: 'POST', body: formData } );
@@ -171,6 +179,20 @@ const BulkGenerate = () => {
                                 <span className="rhwc-desc">Add one or more product IDs separated by commas.</span>
                             </div>
                         ) }
+
+                        <label className="rhwc-toggle-card">
+                            <input
+                                type="checkbox"
+                                checked={ skipGenerated }
+                                onChange={ ( event ) => setSkipGenerated( event.target.checked ) }
+                            />
+                            <span className="rhwc-toggle-card__content">
+                                <span className="rhwc-toggle-card__title">Skip products with generated reviews</span>
+                                <span className="rhwc-toggle-card__desc">
+                                    Leave this on to avoid repeating products already marked by the plugin. Turn it off if you want to add more generated reviews to those same products.
+                                </span>
+                            </span>
+                        </label>
                     </div>
 
                     <div className="rhwc-form-section">
@@ -248,10 +270,10 @@ const BulkGenerate = () => {
                         <div className="rhwc-action-bar__content">
                             <strong>Ready to start</strong>
                             <span>
-                                { products === 'all'
-                                    ? 'The batch will scan all published products and skip already-generated items.'
-                                    : 'The batch will run only for the IDs you entered above.'
-                                }
+                                { products === 'all' && skipGenerated && 'The batch will scan all published products and skip already-generated items.' }
+                                { products === 'all' && ! skipGenerated && 'The batch will scan all published products, including ones that already received generated reviews.' }
+                                { products === 'specific' && skipGenerated && 'The batch will run only for the IDs you entered above and skip products already marked as generated.' }
+                                { products === 'specific' && ! skipGenerated && 'The batch will run only for the IDs you entered above, even if they already have generated reviews.' }
                             </span>
                         </div>
 
@@ -311,11 +333,20 @@ const BulkGenerate = () => {
                             <span className="rhwc-info-list__label">Fallback content</span>
                             <strong className="rhwc-info-list__value">{ STYLE_LABELS[ style ] || 'Balanced paragraphs' }</strong>
                         </div>
+                        <div className="rhwc-info-list__item">
+                            <span className="rhwc-info-list__label">Skip repeats</span>
+                            <strong className="rhwc-info-list__value">{ skipGenerated ? 'Enabled' : 'Disabled' }</strong>
+                        </div>
                     </div>
 
                     <div className="rhwc-note-card">
                         <strong>Tip</strong>
-                        <p>Use a custom reviewer list when you want more variation across the batch and a less repetitive feel.</p>
+                        <p>
+                            { skipGenerated
+                                ? 'If you see a zero-result batch, it usually means the selected products were already marked as generated. Turn off the skip option to create another round.'
+                                : 'Use a custom reviewer list when you want more variation across the batch and a less repetitive feel.'
+                            }
+                        </p>
                     </div>
                 </aside>
             </div>

@@ -8,7 +8,7 @@ class RHWC_Generator {
 	public static function generate_reviews( $product_id, $count, $rating_range, $reviewer_names, $content_style = 'short' ) {
 		$product = wc_get_product( $product_id );
 		if ( ! $product ) {
-			return new WP_Error( 'invalid_product', __( 'Invalid product ID.', 'rhwc' ) );
+			return new WP_Error( 'invalid_product', __( 'Invalid product ID.', 'review-helper-for-woocommerce' ) );
 		}
 
 		$names_array = array_filter( array_map( 'trim', explode( "\n", $reviewer_names ) ) );
@@ -23,7 +23,7 @@ class RHWC_Generator {
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$name   = $names_array[ array_rand( $names_array ) ];
-			$rating = mt_rand( $min_rating, $max_rating );
+			$rating = wp_rand( $min_rating, $max_rating );
 			$text   = self::generate_text( $product_title, $content_style );
 
 			$comment_id = self::insert_review( $product_id, $name, $rating, $text );
@@ -54,8 +54,8 @@ class RHWC_Generator {
 	private static function insert_review( $product_id, $author, $rating, $content ) {
 
 		// Randomize date within last 30 days (uses UTC-safe time())
-		$random_days    = mt_rand( 0, 30 );
-		$random_seconds = mt_rand( 0, 86400 );
+		$random_days    = wp_rand( 0, 30 );
+		$random_seconds = wp_rand( 0, 86400 );
 		$timestamp      = time() - ( $random_days * 86400 ) - $random_seconds;
 		$gmt_time       = gmdate( 'Y-m-d H:i:s', $timestamp );
 		$local_time     = get_date_from_gmt( $gmt_time );
@@ -63,7 +63,7 @@ class RHWC_Generator {
 		$data = array(
 			'comment_post_ID'      => $product_id,
 			'comment_author'       => $author,
-			'comment_author_email' => sanitize_title( $author ) . mt_rand( 10, 999 ) . '@example.com',
+			'comment_author_email' => sanitize_title( $author ) . wp_rand( 10, 999 ) . '@example.com',
 			'comment_author_url'   => '',
 			'comment_content'      => $content,
 			'comment_type'         => 'review',
@@ -161,7 +161,7 @@ class RHWC_Generator {
 			$text = sprintf( $template, $product_title );
 		} else {
 			$template = $long_phrases[ array_rand( $long_phrases ) ];
-            $prefix = ( mt_rand(1, 10) > 5 ) ? $intro[ array_rand( $intro ) ] . ' ' : '';
+			$prefix   = ( wp_rand( 1, 10 ) > 5 ) ? $intro[ array_rand( $intro ) ] . ' ' : '';
 			$text = $prefix . sprintf( $template, $product_title );
 		}
 
