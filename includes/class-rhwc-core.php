@@ -88,21 +88,14 @@ class RHWC_Core {
 
 			// Localize all data the React app needs into window.rhwcReactGlobal
 			wp_localize_script( 'rhwc-react-app', 'rhwcReactGlobal', array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-				'nonce'   => wp_create_nonce( 'rhwc_ajax_nonce' ),
-				'stats'   => array(
-					'totalGenerated'  => get_option( 'rhwc_total_generated', 0 ),
+				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'rhwc_ajax_nonce' ),
+				'stats'    => array(
+					'totalGenerated'    => get_option( 'rhwc_total_generated', 0 ),
 					'lastGeneratedDate' => get_option( 'rhwc_last_generated_date', __( 'Never', 'review-helper-for-woocommerce' ) ),
+					'lastBulkBatch'     => RHWC_Generator::get_last_bulk_batch_summary(),
 				),
-				'settings' => array(
-					'defaultCount'          => get_option( 'rhwc_default_count', 5 ),
-					'defaultRating'         => get_option( 'rhwc_default_rating', '4-5' ),
-					'defaultNames'          => get_option( 'rhwc_default_names', '' ),
-					'customComments'        => get_option( 'rhwc_custom_comments', '' ),
-					'contentStyle'          => get_option( 'rhwc_content_style', 'medium' ),
-					'enableBulk'            => get_option( 'rhwc_enable_bulk', 'yes' ),
-					'deleteDataOnUninstall' => get_option( 'rhwc_delete_data_on_uninstall', 'no' ),
-				),
+				'settings' => RHWC_Admin::get_settings_payload(),
 			) );
 
 			// Also load dashicons just in case theme doesn't

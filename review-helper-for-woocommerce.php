@@ -45,6 +45,11 @@ function rhwc_activate() {
 	add_option( 'rhwc_custom_comments', $default_comments );
 	
 	add_option( 'rhwc_content_style', 'short' );
+	add_option( 'rhwc_review_status', 'approved' );
+	add_option( 'rhwc_date_from_days', 0 );
+	add_option( 'rhwc_date_to_days', 30 );
+	add_option( 'rhwc_excluded_products', '' );
+	add_option( 'rhwc_excluded_categories', '' );
 	add_option( 'rhwc_enable_bulk', 'yes' );
 	add_option( 'rhwc_delete_data_on_uninstall', 'no' );
 }
