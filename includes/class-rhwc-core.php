@@ -30,24 +30,24 @@ class RHWC_Core {
 
 	private function includes() {
 		require_once RHWC_PLUGIN_DIR . 'includes/class-rhwc-generator.php';
-		
+		require_once RHWC_PLUGIN_DIR . 'admin/class-rhwc-admin.php';
+		require_once RHWC_PLUGIN_DIR . 'admin/class-rhwc-ajax.php';
+
 		if ( is_admin() ) {
-			require_once RHWC_PLUGIN_DIR . 'admin/class-rhwc-admin.php';
 			require_once RHWC_PLUGIN_DIR . 'admin/class-rhwc-meta-box.php';
-			require_once RHWC_PLUGIN_DIR . 'admin/class-rhwc-ajax.php';
 		}
 	}
 
 	private function init_hooks() {
+		$ajax = new RHWC_Ajax();
+		$ajax->init();
+
 		if ( is_admin() ) {
 			$admin = new RHWC_Admin();
 			$admin->init();
 
 			$meta_box = new RHWC_Meta_Box();
 			$meta_box->init();
-
-			$ajax = new RHWC_Ajax();
-			$ajax->init();
 
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts' ) );
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widget' ) );
@@ -87,14 +87,28 @@ class RHWC_Core {
 			);
 
 			// Localize all data the React app needs into window.rhwcReactGlobal
+			$site_timezone = wp_timezone_string();
+
+			if ( empty( $site_timezone ) ) {
+				$site_timezone = sprintf(
+					'UTC%s',
+					(string) get_option( 'gmt_offset', 0 )
+				);
+			}
+
 			wp_localize_script( 'rhwc-react-app', 'rhwcReactGlobal', array(
 				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'rhwc_ajax_nonce' ),
 				'version'  => RHWC_VERSION,
+				'siteTimezone' => $site_timezone,
 				'stats'    => array(
-					'totalGenerated'    => get_option( 'rhwc_total_generated', 0 ),
-					'lastGeneratedDate' => get_option( 'rhwc_last_generated_date', __( 'Never', 'review-helper-for-woocommerce' ) ),
-					'lastBulkBatch'     => RHWC_Generator::get_last_bulk_batch_summary(),
+					'totalGenerated'     => get_option( 'rhwc_total_generated', 0 ),
+					'lastGeneratedDate'  => get_option( 'rhwc_last_generated_date', __( 'Never', 'review-helper-for-woocommerce' ) ),
+					'lastBulkBatch'      => RHWC_Generator::get_last_bulk_batch_summary(),
+					'scheduledBulkJob'   => RHWC_Generator::get_scheduled_bulk_job_summary(),
+					'scheduledBulkJobs'  => RHWC_Generator::get_scheduled_bulk_jobs_summary(),
+					'scheduleHistory'    => RHWC_Generator::get_schedule_history_summary(),
+					'scheduleTemplates'  => RHWC_Generator::get_schedule_templates_summary(),
 				),
 				'settings' => RHWC_Admin::get_settings_payload(),
 			) );

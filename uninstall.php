@@ -32,6 +32,10 @@ $rhwc_options = array(
 	'rhwc_total_generated',
 	'rhwc_last_generated_date',
 	'rhwc_last_bulk_batch',
+	'rhwc_scheduled_bulk_job',
+	'rhwc_scheduled_bulk_jobs',
+	'rhwc_schedule_history',
+	'rhwc_schedule_templates',
 	'rhwc_delete_data_on_uninstall',
 );
 
