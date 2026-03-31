@@ -90,6 +90,7 @@ class RHWC_Core {
 			wp_localize_script( 'rhwc-react-app', 'rhwcReactGlobal', array(
 				'ajaxUrl'  => admin_url( 'admin-ajax.php' ),
 				'nonce'    => wp_create_nonce( 'rhwc_ajax_nonce' ),
+				'version'  => RHWC_VERSION,
 				'stats'    => array(
 					'totalGenerated'    => get_option( 'rhwc_total_generated', 0 ),
 					'lastGeneratedDate' => get_option( 'rhwc_last_generated_date', __( 'Never', 'review-helper-for-woocommerce' ) ),

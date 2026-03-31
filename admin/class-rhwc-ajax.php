@@ -17,8 +17,6 @@ class RHWC_Ajax {
 		add_action( 'wp_ajax_rhwc_edit_review', array( $this, 'edit_review' ) );
 		add_action( 'wp_ajax_rhwc_save_settings', array( $this, 'save_settings' ) );
 		add_action( 'wp_ajax_rhwc_import_settings', array( $this, 'import_settings' ) );
-		add_action( 'wp_ajax_rhwc_get_settings', array( $this, 'get_settings' ) );
-		add_action( 'wp_ajax_rhwc_get_products_list', array( $this, 'get_products_list' ) );
 	}
 
 	private function check_permissions() {
@@ -460,50 +458,6 @@ class RHWC_Ajax {
 				'settings' => $result,
 			)
 		);
-	}
-
-	public function get_settings() {
-		if ( ! check_ajax_referer( 'rhwc_ajax_nonce', 'security', false ) ) {
-			wp_send_json_error(
-				array(
-					'message' => esc_html__( 'Security check failed.', 'review-helper-for-woocommerce' ),
-				),
-				403
-			);
-		}
-		$this->check_permissions();
-
-		wp_send_json_success( RHWC_Admin::get_settings_payload() );
-	}
-
-	public function get_products_list() {
-		if ( ! check_ajax_referer( 'rhwc_ajax_nonce', 'security', false ) ) {
-			wp_send_json_error(
-				array(
-					'message' => esc_html__( 'Security check failed.', 'review-helper-for-woocommerce' ),
-				),
-				403
-			);
-		}
-		$this->check_permissions();
-
-		$products = wc_get_products(
-			array(
-				'limit'  => -1,
-				'status' => 'publish',
-				'return' => 'objects',
-			)
-		);
-		$list = array();
-
-		foreach ( $products as $product ) {
-			$list[] = array(
-				'id'   => $product->get_id(),
-				'name' => wp_strip_all_tags( $product->get_name() ),
-			);
-		}
-
-		wp_send_json_success( $list );
 	}
 
 	public function get_reviews() {

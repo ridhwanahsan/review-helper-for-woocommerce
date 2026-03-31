@@ -36,6 +36,8 @@ class RHWC_Meta_Box {
 				<label for="rhwc_rating"><strong><?php esc_html_e( 'Rating Range:', 'review-helper-for-woocommerce' ); ?></strong></label>
 				<select id="rhwc_rating" class="widefat">
 					<option value="5" <?php selected( $default_rating, '5' ); ?>><?php esc_html_e( '5 Stars', 'review-helper-for-woocommerce' ); ?></option>
+					<option value="4" <?php selected( $default_rating, '4' ); ?>><?php esc_html_e( '4 Stars', 'review-helper-for-woocommerce' ); ?></option>
+					<option value="3" <?php selected( $default_rating, '3' ); ?>><?php esc_html_e( '3 Stars', 'review-helper-for-woocommerce' ); ?></option>
 					<option value="4-5" <?php selected( $default_rating, '4-5' ); ?>><?php esc_html_e( '4-5 Stars', 'review-helper-for-woocommerce' ); ?></option>
 					<option value="3-5" <?php selected( $default_rating, '3-5' ); ?>><?php esc_html_e( '3-5 Stars', 'review-helper-for-woocommerce' ); ?></option>
 					<option value="1-5" <?php selected( $default_rating, '1-5' ); ?>><?php esc_html_e( '1-5 Stars', 'review-helper-for-woocommerce' ); ?></option>
@@ -52,6 +54,9 @@ class RHWC_Meta_Box {
 					<?php esc_html_e( 'Generate Reviews', 'review-helper-for-woocommerce' ); ?>
 				</button>
 				<span class="spinner" id="rhwc-single-spinner"></span>
+			</p>
+			<p class="description">
+				<?php esc_html_e( 'Review status and generated date window follow the plugin settings.', 'review-helper-for-woocommerce' ); ?>
 			</p>
 			<div id="rhwc-single-message"></div>
 		</div>

@@ -15,6 +15,11 @@ const STYLE_LABELS = {
 	long: 'Detailed paragraphs',
 };
 
+const STATUS_LABELS = {
+	approved: 'Approved immediately',
+	pending: 'Pending moderation',
+};
+
 const countNames = ( value ) =>
 	value
 		.split( '\n' )
@@ -23,9 +28,32 @@ const countNames = ( value ) =>
 
 const countIds = ( value ) =>
 	value
-		.split( ',' )
+		.split( /[\s,]+/ )
 		.map( ( item ) => item.trim() )
 		.filter( Boolean ).length;
+
+const formatDateWindow = ( startValue, endValue ) => {
+	let start = Number.parseInt( startValue, 10 );
+	let end = Number.parseInt( endValue, 10 );
+
+	if ( Number.isNaN( start ) || start < 0 ) {
+		start = 0;
+	}
+
+	if ( Number.isNaN( end ) || end < 0 ) {
+		end = 30;
+	}
+
+	if ( start > end ) {
+		[ start, end ] = [ end, start ];
+	}
+
+	if ( start === end ) {
+		return `${ start } days ago only`;
+	}
+
+	return `${ start } to ${ end } days ago`;
+};
 
 const formatDateTime = ( value ) => {
 	if ( ! value ) {
@@ -61,6 +89,17 @@ const BulkGenerate = () => {
 
 	const selectedIdsCount = countIds( specificIds );
 	const reviewerPoolCount = countNames( names );
+	const reviewStatus = settings.reviewStatus || 'approved';
+	const dateWindow = formatDateWindow(
+		settings.dateFromDays ?? 0,
+		settings.dateToDays ?? 30
+	);
+	const excludedProductsCount = countIds( settings.excludedProducts || '' );
+	const excludedCategoriesCount = countIds(
+		settings.excludedCategories || ''
+	);
+	const exclusionsActive =
+		excludedProductsCount > 0 || excludedCategoriesCount > 0;
 	let currentTargetLabel = 'Specific products';
 
 	if ( 'all' === products ) {
@@ -220,6 +259,10 @@ const BulkGenerate = () => {
 						<span className="rhwc-page-hero__chip">
 							{ STYLE_LABELS[ style ] || 'Balanced paragraphs' }
 						</span>
+						<span className="rhwc-page-hero__chip">
+							{ STATUS_LABELS[ reviewStatus ] ||
+								'Approved immediately' }
+						</span>
 					</div>
 				</div>
 
@@ -242,6 +285,19 @@ const BulkGenerate = () => {
 							{ reviewerPoolCount
 								? `${ reviewerPoolCount } names`
 								: 'Built-in names' }
+						</strong>
+					</div>
+					<div className="rhwc-page-stat">
+						<span className="rhwc-page-stat__label">
+							Active exclusions
+						</span>
+						<strong className="rhwc-page-stat__value">
+							{ exclusionsActive
+								? `${
+										excludedProductsCount +
+										excludedCategoriesCount
+								  } rules`
+								: 'None' }
 						</strong>
 					</div>
 				</div>
@@ -370,6 +426,13 @@ const BulkGenerate = () => {
 								</span>
 							</span>
 						</label>
+
+						{ exclusionsActive && (
+							<div className="rhwc-tip-box">
+								Bulk exclusions from Settings are active:
+								{ ` ${ excludedProductsCount } product IDs and ${ excludedCategoriesCount } category IDs will be skipped automatically.` }
+							</div>
+						) }
 					</div>
 
 					<div className="rhwc-form-section">
@@ -491,6 +554,11 @@ const BulkGenerate = () => {
 								{ products === 'specific' &&
 									! skipGenerated &&
 									'The batch will run only for the IDs you entered above, even if they already have generated reviews.' }
+								{ ` New reviews will be ${
+									reviewStatus === 'pending'
+										? 'saved as pending'
+										: 'approved immediately'
+								} with dates spread across ${ dateWindow }.` }
 							</span>
 						</div>
 
@@ -579,6 +647,33 @@ const BulkGenerate = () => {
 							<strong className="rhwc-info-list__value">
 								{ STYLE_LABELS[ style ] ||
 									'Balanced paragraphs' }
+							</strong>
+						</div>
+						<div className="rhwc-info-list__item">
+							<span className="rhwc-info-list__label">
+								Review status
+							</span>
+							<strong className="rhwc-info-list__value">
+								{ STATUS_LABELS[ reviewStatus ] ||
+									'Approved immediately' }
+							</strong>
+						</div>
+						<div className="rhwc-info-list__item">
+							<span className="rhwc-info-list__label">
+								Date window
+							</span>
+							<strong className="rhwc-info-list__value">
+								{ dateWindow }
+							</strong>
+						</div>
+						<div className="rhwc-info-list__item">
+							<span className="rhwc-info-list__label">
+								Excluded by rules
+							</span>
+							<strong className="rhwc-info-list__value">
+								{ exclusionsActive
+									? `${ excludedProductsCount } products / ${ excludedCategoriesCount } categories`
+									: 'None' }
 							</strong>
 						</div>
 						<div className="rhwc-info-list__item">

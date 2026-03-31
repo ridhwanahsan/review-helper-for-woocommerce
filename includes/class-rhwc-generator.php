@@ -46,7 +46,7 @@ class RHWC_Generator {
 		);
 		$names_array = array_filter( array_map( 'trim', explode( "\n", $reviewer_names ) ) );
 		if ( empty( $names_array ) ) {
-			$names_array = array( 'Anonymous' );
+			$names_array = self::get_default_name_pool();
 		}
 
 		list( $min_rating, $max_rating ) = self::parse_rating_range( $rating_range );
@@ -240,6 +240,15 @@ class RHWC_Generator {
 			'dateFromDays' => min( 3650, $date_from_days ),
 			'dateToDays'   => min( 3650, $date_to_days ),
 		);
+	}
+
+	private static function get_default_name_pool() {
+		$default_names = class_exists( 'RHWC_Admin' )
+			? RHWC_Admin::get_default_names()
+			: "John Doe\nJane Smith\nMichael Johnson\nEmily Davis\nChris Brown\nSarah Miller\nDavid Wilson\nLaura Taylor\nJames Moore\nLinda Thomas\nRobert Anderson\nMary Thomas\nWilliam Jackson\nPatricia White\nRichard Harris\nJennifer Martin\nCharles Thompson\nElizabeth Garcia\nJoseph Martinez\nSusan Robinson";
+		$names_array   = array_filter( array_map( 'trim', explode( "\n", $default_names ) ) );
+
+		return ! empty( $names_array ) ? $names_array : array( 'Anonymous' );
 	}
 
 	private static function insert_review( $product_id, $author, $rating, $content, $review_status = 'approved', $date_from_days = 0, $date_to_days = 30 ) {

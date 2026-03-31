@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Review Helper for WooCommerce
  * Description: Helps store admins easily generate and manage WooCommerce product reviews manually (on click) and in bulk, without using AI or external APIs.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Antigravity
  * License: GPL-2.0-or-later
  * Text Domain: review-helper-for-woocommerce
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-define( 'RHWC_VERSION', '1.0.0' );
+define( 'RHWC_VERSION', '1.1.0' );
 define( 'RHWC_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'RHWC_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 

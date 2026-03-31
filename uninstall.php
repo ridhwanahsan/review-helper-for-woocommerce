@@ -33,7 +33,6 @@ $rhwc_options = array(
 	'rhwc_last_generated_date',
 	'rhwc_last_bulk_batch',
 	'rhwc_delete_data_on_uninstall',
-	'rhwc_review_notice_dismissed',
 );
 
 foreach ( $rhwc_options as $rhwc_option ) {
@@ -41,3 +40,6 @@ foreach ( $rhwc_options as $rhwc_option ) {
 }
 
 delete_post_meta_by_key( '_rhwc_generated_reviews' );
+
+// Remove comment-level generated review markers added by the plugin.
+delete_metadata( 'comment', 0, '_rhwc_generated_review', '', true );
